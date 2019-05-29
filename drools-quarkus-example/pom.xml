@@ -13,6 +13,8 @@
 
   <properties>
     <generateModel>YES</generateModel>
+    <generateProcessModel>NO</generateProcessModel>
+    <version.io.quarkus>999-SNAPSHOT</version.io.quarkus>
   </properties>
 
   <dependencyManagement>
@@ -30,9 +32,23 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-maven-plugin</artifactId>
-        <extensions>true</extensions>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/resources</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -53,16 +69,23 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.drools</groupId>
+      <groupId>org.kie.kogito</groupId>
       <artifactId>drools-decisiontables</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.drools</groupId>
-          <artifactId>drools-core</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>drools-core-static</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>drools-model-compiler</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-kogito-deployment</artifactId>
+      <version>${version.io.quarkus}</version>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
@@ -74,25 +97,6 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>drools-core-static</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>drools-model-compiler</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.kie.kogito</groupId>
-          <artifactId>drools-core-dynamic</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.thoughtworks.xstream</groupId>
-          <artifactId>xstream</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
